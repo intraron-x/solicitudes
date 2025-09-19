@@ -60,6 +60,7 @@ public class SecurityConfig {
                         // intraron: Se agrega la nueva regla para el endpoint del requerimiento #4.
                         // Solo los usuarios con el rol 'ASESOR' pueden acceder a esta ruta.
                         .pathMatchers(HttpMethod.GET, "/api/v1/solicitud").hasRole("ASESOR")
+                        .pathMatchers(HttpMethod.POST, "/api/v1/solicitud").hasRole("USER")
                         .anyExchange().authenticated() // intraron: Requerir autenticación para cualquier otra solicitud
                 )
                 .addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION) // intraron: Añadir nuestro filtro JWT al inicio de la cadena de seguridad

@@ -85,7 +85,8 @@ public class LoanUseCase {
      * @return Mono<Loan> que emite la solicitud guardada.
      */
     public Mono<Loan> save(Loan loan, String loggedInUserEmail) {
-        log.info("Iniciando proceso de registro para la solicitud del usuario: {}", loan.getUserEmail());
+        log.info("Iniciando proceso de registro para la solicitud del usuario (Requerimiento): {}", loan.getUserEmail());
+        log.info("Usuario logueado (token): {}", loggedInUserEmail);
 
         // intraron: Se valida que el usuario de la solicitud coincida con el usuario logueado.
         if (!loggedInUserEmail.equalsIgnoreCase(loan.getUserEmail())) {
