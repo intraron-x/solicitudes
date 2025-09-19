@@ -1,0 +1,8 @@
+dependencies {
+    implementation project(':model')
+    // Dependencia de Lombok
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
+    // Dependencia de SLF4J, solo para la compilación
+    compileOnly 'org.slf4j:slf4j-api:2.0.12'
+}

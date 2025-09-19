@@ -1,0 +1,16 @@
+dependencies {
+    implementation project(':usecase')
+    implementation project(':model')
+    implementation project(':r2dbc-postgresql') // intraron: Se agregó esta dependencia para resolver UserEntity
+    implementation project(':rest-consumer')
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.9'
+
+    // intraron: La dependencia de Spring Security y JWT ahora debe ir en el módulo de infraestructura (ej. reactive-web)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+}
