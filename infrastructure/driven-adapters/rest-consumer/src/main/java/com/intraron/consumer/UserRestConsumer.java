@@ -12,6 +12,7 @@ import com.intraron.model.loan.gateways.UserGateway;
 import com.intraron.consumer.dto.ExternalUserDTO; // Se crea un DTO para el mapeo
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,19 @@ import org.springframework.http.HttpStatus;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class UserRestConsumer implements UserGateway {
     private final WebClient client;
 
-
+    // intraron: Se inyecta la URL del servicio desde las propiedades
+    @Autowired
+    public UserRestConsumer(@Value("${autenticacion.service.url:http://localhost:8080}") String autenticacionServiceUrl,
+                            @Value("${intraron.internal.service-api-key}") String apiKey) {
+                this.client = WebClient.builder()
+                .baseUrl(autenticacionServiceUrl).defaultHeader("X-API-Key", apiKey)
+                .build();
+        log.info("URL servicio de terceros auth: {}", autenticacionServiceUrl);
+    }
 
     /**
      * @author intraron
@@ -37,6 +46,7 @@ public class UserRestConsumer implements UserGateway {
     @Override
     public Mono<UserLoanDTO> findUserByEmail(String email) {
         log.info("Llamando al servicio de autenticación para validar el usuario con email: {}", email);
+
         return client.get()
                 .uri(uriBuilder -> uriBuilder.path("/api/v1/users/by-email").queryParam("email", email).build())
                 .retrieve()
