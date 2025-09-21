@@ -1,5 +1,14 @@
 server:
   port: 8081
+logging:
+  level:
+    org.springframework.security: INFO
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+  default-produces-media-type: application/json
 spring:
   application:
     name: "solicitudes"

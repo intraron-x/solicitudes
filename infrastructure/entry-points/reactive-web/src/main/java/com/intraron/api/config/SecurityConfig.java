@@ -23,29 +23,14 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    //private final ReactiveUserDetailsService reactiveUserDetailsService;
-    //private final PasswordEncoder passwordEncoder;
+
 
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
-
-    /*public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
-                          ReactiveUserDetailsService reactiveUserDetailsService,
-                          PasswordEncoder passwordEncoder) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.reactiveUserDetailsService = reactiveUserDetailsService;
-        this.passwordEncoder = passwordEncoder;
-    }*/
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    /*@Bean
-    public ReactiveAuthenticationManager authenticationManager() {
-        var authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(reactiveUserDetailsService);
-        authenticationManager.setPasswordEncoder(passwordEncoder);
-        return authenticationManager;
-    }*/
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
@@ -56,7 +41,8 @@ public class SecurityConfig {
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance()) // intraron: Deshabilitar el almacenamiento del contexto de seguridad, es stateless con JWT
 				//.headers(ServerHttpSecurity.HeaderSpec::disable) // <- Esta es la línea que soluciona el problem
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/api/v1/auth/login", "/api/v1/auth/register", "/webjars/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll() // intraron: Permitir acceso a los endpoints de autenticación y documentación
+                        .pathMatchers("/api/v1/auth/login", "/api/v1/auth/register").permitAll() // intraron: Permitir acceso a los endpoints de autenticación y documentación
+                        .pathMatchers("/api-docs/**",",/webjars/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         // intraron: Se agrega la nueva regla para el endpoint del requerimiento #4.
                         // Solo los usuarios con el rol 'ASESOR' pueden acceder a esta ruta.
                         .pathMatchers(HttpMethod.GET, "/api/v1/getsolicitud").hasRole("ASESOR")
