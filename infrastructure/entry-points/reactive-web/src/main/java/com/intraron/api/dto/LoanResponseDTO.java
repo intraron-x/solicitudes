@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 @Data
 @Builder
@@ -23,6 +24,8 @@ public class LoanResponseDTO implements Serializable {
     private Integer loanTerm;
     private String userEmail;
     private String userName;
+    private OffsetDateTime createdat;
+    private OffsetDateTime fechaCreacion;
     private String loanType;
     private Double interestRate;
     private String requestStatus;
@@ -39,6 +42,8 @@ public class LoanResponseDTO implements Serializable {
         return LoanResponseDTO.builder()
                 .loanAmount(loan.getLoanAmount())
                 .loanTerm(loan.getLoanTerm())
+                .fechaCreacion(loan.getFecha_creacion())
+                .createdat(loan.getCreated_at())
                 .userEmail(loan.getUserEmail())
                 .loanType(loan.getLoanType())
                 .interestRate(loan.getInterestRate())

@@ -14,6 +14,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -33,6 +34,12 @@ public class LoanEntity {
 
     @Column("loan_term")
     private Integer loanTerm;
+
+    @Column("created_at")
+    private OffsetDateTime createdat;
+
+    @Column("fecha_creacion")
+    private OffsetDateTime fechaCreacion;
 
     @Column("loan_type")
     private String loanType;
@@ -55,6 +62,8 @@ public class LoanEntity {
                 .userEmail(this.userEmail)
                 .loanAmount(this.loanAmount)
                 .loanTerm(this.loanTerm)
+                .created_at(this.createdat)
+                .fecha_creacion(this.fechaCreacion)
                 .loanType(this.loanType)
                 .interestRate(this.interestRate)
                 .requestStatus(this.requestStatus)

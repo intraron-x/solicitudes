@@ -59,7 +59,7 @@ public class SecurityConfig {
                         .pathMatchers("/api/v1/auth/login", "/api/v1/auth/register", "/webjars/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll() // intraron: Permitir acceso a los endpoints de autenticación y documentación
                         // intraron: Se agrega la nueva regla para el endpoint del requerimiento #4.
                         // Solo los usuarios con el rol 'ASESOR' pueden acceder a esta ruta.
-                        .pathMatchers(HttpMethod.GET, "/api/v1/solicitud").hasRole("ASESOR")
+                        .pathMatchers(HttpMethod.GET, "/api/v1/getsolicitud").hasRole("ASESOR")
                         .pathMatchers(HttpMethod.POST, "/api/v1/solicitud").hasRole("USER")
                         .anyExchange().authenticated() // intraron: Requerir autenticación para cualquier otra solicitud
                 )

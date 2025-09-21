@@ -3,18 +3,20 @@
 -- Contiene las tablas necesarias para el proyecto de gestión de préstamos.
 
 CREATE TABLE IF NOT EXISTS userdata (
-    id VARCHAR(255) PRIMARY KEY,
     nombres VARCHAR(255) NOT NULL,
     apellidos VARCHAR(255) NOT NULL,
     fecha_nacimiento DATE NOT NULL,
     direccion VARCHAR(255),
     telefono VARCHAR(20),
     correo_electronico VARCHAR(255) NOT NULL,
-    salario_base DOUBLE PRECISION NOT NULL
+    salario_base DOUBLE PRECISION NOT NULL,
+    password VARCHAR(255),
+    roles TEXT[],
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 );
 
 CREATE TABLE IF NOT EXISTS loan (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_email VARCHAR(255) NOT NULL,
     loan_amount DOUBLE PRECISION NOT NULL,
     loan_term INTEGER NOT NULL,
@@ -26,10 +28,12 @@ CREATE TABLE IF NOT EXISTS loan (
 );
 
 CREATE TABLE IF NOT EXISTS solicitudes (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_email VARCHAR(255) NOT NULL,
     loan_amount DOUBLE PRECISION NOT NULL,
     loan_term INTEGER NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    fecha_creacion TIMESTAMPTZ DEFAULT now(),
     loan_type VARCHAR(255),
     interest_rate DOUBLE PRECISION,
     request_status VARCHAR(50) NOT NULL,

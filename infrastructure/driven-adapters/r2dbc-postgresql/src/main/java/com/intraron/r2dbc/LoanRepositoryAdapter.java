@@ -18,6 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -128,12 +129,16 @@ public class LoanRepositoryAdapter implements LoanRepository {
      */
     @Override
     public Mono<Tuple2<List<Loan>, Long>> findAllByStatusPaginated(List<String> statuses, DomainPageable pageable) {
-        log.info("Buscando solicitudes con los estados: {} con paginación", statuses);
+        log.info("1 Buscando solicitudes con los estados: {} con paginación", statuses);
 
         // Consulta para obtener los datos paginados
         String dataSql = "SELECT * FROM solicitudes WHERE request_status IN (:statuses) ORDER BY " + pageable.getSortBy() + " ASC LIMIT :limit OFFSET :offset";
 
+        log.info("2 Query: {} con paginación", dataSql);
+
         int offset = pageable.getPage() * pageable.getSize();
+
+        log.info("3 Buscando solicitudes con los estados: {}, ordenado por: {}, limit: {}, offset: {}", statuses, pageable.getSortBy(), pageable.getSize(), offset);
 
         Mono<List<Loan>> dataMono = databaseClient.sql(dataSql)
                 .bind("statuses", statuses)
@@ -144,6 +149,8 @@ public class LoanRepositoryAdapter implements LoanRepository {
                         .userEmail(row.get("user_email", String.class))
                         .loanAmount(row.get("loan_amount", Double.class))
                         .loanTerm(row.get("loan_term", Integer.class))
+                        .createdat(row.get("created_at", OffsetDateTime.class))
+                        .fechaCreacion(row.get("fecha_creacion", OffsetDateTime.class))
                         .loanType(row.get("loan_type", String.class))
                         .interestRate(row.get("interest_rate", Double.class))
                         .requestStatus(row.get("request_status", String.class))
@@ -153,15 +160,19 @@ public class LoanRepositoryAdapter implements LoanRepository {
                 )
                 .all()
                 .map(LoanEntity::toLoan)
-                .collectList();
+                .collectList()
+                .doOnSuccess(loans -> log.info("4 Resultados de la consulta: {}", loans));
 
         // Consulta para obtener el conteo total de registros
         String countSql = "SELECT COUNT(*) FROM solicitudes WHERE request_status IN (:statuses)";
 
+        log.info("5 Query de conteo: {}, y los status: {}", countSql, statuses);
+
         Mono<Long> countMono = databaseClient.sql(countSql)
                 .bind("statuses", statuses)
                 .map(row -> row.get(0, Long.class))
-                .one();
+                .one()
+                .doOnSuccess(count -> log.info("6 Resultado de la consulta de conteo: {}", count));;
 
         // Se combinan los dos Monos en una tupla
         return Mono.zip(dataMono, countMono);

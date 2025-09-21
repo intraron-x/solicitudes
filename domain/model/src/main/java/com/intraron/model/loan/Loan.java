@@ -9,6 +9,7 @@ package com.intraron.model.loan;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -18,6 +19,8 @@ public class Loan {
     private String userEmail;
     private Double loanAmount;
     private Integer loanTerm;
+    private OffsetDateTime created_at;
+    private OffsetDateTime fecha_creacion;
     private String loanType;
     private Double interestRate;
     private String requestStatus;
